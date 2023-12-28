@@ -1,0 +1,10 @@
+Product ID: 2
+Product Name: mobile
+Product Price: 100000
+Product Quantity: 100
+------------------------
+Product ID: 1
+Product Name: soap
+Product Price: 50
+Product Quantity: 100
+------------------------

@@ -2,8 +2,11 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <algorithm>
+#include <conio.h>
 #include <vector>
 #include <limits>
+#include <cctype>
 #include <cstdlib>
 #include <stdexcept>
 #include"queue1.h"
@@ -15,7 +18,7 @@ using namespace std;
 int search(int);
 int display();
 string check(int);       //   for checking quantity
-
+int main();
 ////////////////////////////////////////////////////////////////////
 struct node
 {
@@ -34,10 +37,45 @@ private:
     string password;
 public:
     void signUp() {
-        cout << "Enter username: ";
-        cin >> username;
-        cout << "Enter password: ";
-        password = getPassword1();
+        while (true)
+        {
+            bool flag = false;
+            cout << "Enter username: ";
+            cin >> username;
+
+            if (username.length()<4)
+            {
+                
+                for (int i = 0; i < username.length(); i++)
+                {
+                    if (username[i] == '$' || username[i] == '#' || username[i] == '%' || username[i] == '&' || username[i] == '(' || username[i] == ')' || username[i] == '*' || username[i] == '^' || username[i] == '!' || username[i] == '~' || username[i] == '/' || username[i] == '<' || username[i] == ';' || username[i] == '+' || username[i] == '/' || username[i] == '"' || username[i] == '\'')
+                        flag = true;
+                }
+                cout << "Your Username should be atleast 4 character..." << endl;
+                if (flag)
+                    cout << "Your Username Should Not Contain Special Symbole except ( @ OR _ ) " << endl;
+                system("pause");
+                continue;
+            }
+            break;
+        }
+       
+        
+        while (true)
+        {
+            
+            cout << "Enter password: ";
+            password = getPassword1();
+
+            if (password.length() < 5)
+            {
+                cout << "Your Username should be atleast 5 character..." << endl;
+                system("pause");
+                continue;
+            }
+            break;
+        }
+        
 
         // Write the credentials to a file
         ofstream file("user_credentials.txt");
@@ -46,6 +84,9 @@ public:
         file.close();
 
         cout << "Sign up successful.\n";
+
+        cout << "\n\nPlease Enter Username and Password To Login" << endl;
+        login();
     }
 
     bool login() {
@@ -186,7 +227,8 @@ void beg()
         cin >> id;
         if (cin.fail()) {
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cin.ignore();
             cout << "Invalid input. Please enter a valid product ID.\n";
         }
         else {
@@ -217,7 +259,8 @@ void beg()
         cin >> pre;
         if (cin.fail()) {
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cin.ignore();
             cout << "Invalid input. Please enter a valid product price.\n";
         }
         else {
@@ -231,13 +274,15 @@ void beg()
         cin >> quant;
         if (cin.fail()) {
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cin.ignore();
             cout << "Invalid input. Please enter a valid product quantity.\n";
         }
         else {
             break;
         }
     }
+
     t->quantity = quant;
 
     if (head == NULL)
@@ -306,7 +351,8 @@ void delPro()
         cin >> id;
         if (cin.fail()) {
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cin.ignore();
             cout << "Invalid input. Please enter a valid product ID.\n";
         }
         else {
@@ -411,7 +457,8 @@ void modify()
             cin >> nid;
             if (cin.fail()) {
                 cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin.ignore();
                 cout << "Invalid input. Please enter a valid product ID.\n";
             }
             else {
@@ -435,7 +482,8 @@ void modify()
             cin >> pre;
             if (cin.fail()) {
                 cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin.ignore();
                 cout << "Invalid input. Please enter a valid product price.\n";
             }
             else {
@@ -448,7 +496,8 @@ void modify()
             cin >> nq;
             if (cin.fail()) {
                 cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin.ignore();
                 cout << "Invalid input. Please enter a valid product quantity.\n";
             }
             else {
@@ -633,6 +682,7 @@ string check(int quant)
 ///////////////////////////////////////////////////////////////////////
 void buy(Cart& cart)
 {
+    fstream file("products.txt");
     system("cls");
     display();
     string products[20];
@@ -647,7 +697,8 @@ void buy(Cart& cart)
     cout << "How many products you want to buy : ";
     while (!(cin >> no) || no < 1) {
         cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cin.ignore();
         cout << "Invalid input. Please enter a positive integer.\n";
     }
 
@@ -660,7 +711,8 @@ void buy(Cart& cart)
             cin >> id;
             if (cin.fail()) {
                 cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin.ignore();
                 cout << "Invalid input. Please enter a valid product ID.\n";
             }
             else {
@@ -674,7 +726,9 @@ void buy(Cart& cart)
             system("cls");
             return;
         }
-
+        
+        string line,des,predata;
+        int data;
         int pos = search(id);
         if (pos != -1) {
             cur = head;
@@ -689,7 +743,55 @@ void buy(Cart& cart)
             c++;
             pay = pay + (cur->prePrice);
             i++;
-
+            int data;
+            string line;
+            vector<string> products;
+            while (getline(file, line)) {
+                // Read the product details from the file
+                string pre = line.substr(12); // Get the ID
+                getline(file, line);
+                string name = line.substr(14); // Get the name
+                getline(file, line);
+                string price = line.substr(15); // Get the price
+                getline(file, line);
+                string quantity;
+                if (line.length() > 18) {
+                    quantity = line.substr(18); // Get the quantity
+                }
+                else {
+                    cout << "Invalid line format in products.txt" << endl;
+                }
+                getline(file, line); // Skip the separator line
+                data = stoi(pre);
+                int nq = stoi(quantity);
+                nq -= 1;
+                if (data == id)
+                {
+                    // This is the product we want to modify
+                        // Store the new product details in the vector
+                    products.push_back("Product ID: " + to_string(data));
+                    products.push_back("Product Name: " + name);
+                    products.push_back("Product Price: " + price);
+                    products.push_back("Product Quantity: " + to_string(nq));
+                    products.push_back("------------------------");
+                    // Skip the old product details in the file
+                    for (int i = 0; i < 4; i++) {
+                        getline(file, line);
+                    }
+               
+                    
+                }
+                else {
+                    // This is not the product we want to modify
+                    // Store the product details in the vector as is
+                    products.push_back(line);
+                    for (int i = 0; i < 4; i++) {
+                        getline(file, line);
+                        products.push_back(line);
+                    }
+                }
+                c = c + 1;
+            }
             // Add the product to the cart
             cart.addToCart(cur);
 
@@ -844,7 +946,8 @@ void administator()
 
         if (cin.fail() || ch < 0 || ch > 8) {
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cin.ignore();
             cout << "Invalid input. Please enter a number between 0 and 8.\n";
             continue;
         }
@@ -865,7 +968,8 @@ void administator()
                 modify();
                 if (cin.fail()) {
                     cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cin.ignore();
                     cout << "Invalid input. Please enter a valid product ID.\n";
                 }
                 else {
@@ -895,7 +999,8 @@ void administator()
                 cin >> x;
                 if (cin.fail()) {
                     cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cin.ignore();
                     cout << "Invalid input. Please enter a valid integer.\n";
                 }
                 else {
@@ -907,7 +1012,8 @@ void administator()
                 cin >> n;
                 if (cin.fail()) {
                     cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cin.ignore();
                     cout << "Invalid input. Please enter a valid integer.\n";
                 }
                 else {
@@ -964,7 +1070,8 @@ int main()
 
         if (cin.fail() || ch < 1 || ch > 3) {
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cin.ignore();
             cout << "Invalid input. Please enter a number between 1 and 3.\n";
         }
         else {
