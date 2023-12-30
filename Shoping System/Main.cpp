@@ -726,8 +726,8 @@ void buy(Cart& cart)
             system("cls");
             return;
         }
-        
-        string line,des,predata;
+
+        string line, des, predata;
         int data;
         int pos = search(id);
         if (pos != -1) {
@@ -746,6 +746,13 @@ void buy(Cart& cart)
             int data;
             string line;
             vector<string> products;
+            products.clear();
+            ifstream file("products.txt"); // Open the file in read mode
+            if (!file) {
+                cout << "Unable to open file";
+                return; // terminate with error
+            }
+            int reverse = 5;
             while (getline(file, line)) {
                 // Read the product details from the file
                 string pre = line.substr(12); // Get the ID
@@ -761,41 +768,57 @@ void buy(Cart& cart)
                 else {
                     cout << "Invalid line format in products.txt" << endl;
                 }
-                getline(file, line); // Skip the separator line
+                getline(file, line);
+
+                 // Skip the separator line
                 data = stoi(pre);
                 int nq = stoi(quantity);
                 nq -= 1;
+
                 if (data == id)
                 {
                     // This is the product we want to modify
-                        // Store the new product details in the vector
+                    // Store the new product details in the vector
                     products.push_back("Product ID: " + to_string(data));
                     products.push_back("Product Name: " + name);
                     products.push_back("Product Price: " + price);
                     products.push_back("Product Quantity: " + to_string(nq));
                     products.push_back("------------------------");
                     // Skip the old product details in the file
-                    for (int i = 0; i < 4; i++) {
+                    file.seekg(reverse-5);
+                    file.clear();
+                    for (int i = 0; i < 5; i++) {
                         getline(file, line);
+                        reverse++;
                     }
-               
-                    
+                   
+
                 }
                 else {
                     // This is not the product we want to modify
                     // Store the product details in the vector as is
-                    products.push_back(line);
-                    for (int i = 0; i < 4; i++) {
+                    //products.push_back(line);
+                    file.seekg(reverse -5);
+                    file.clear();
+                    for (int i = 0; i < 5; i++) {
                         getline(file, line);
                         products.push_back(line);
+                        reverse++;
                     }
+                    //products.push_back("------------------------");
                 }
+                
                 c = c + 1;
             }
+            file.close(); // Close the file after reading
+
+            ofstream file_out("products.txt"); // Open the file in write mode
+            for (int i = 0; i < products.size(); i++)
+                file_out << products[i] << "\n"; // Write the product details back to the file
+            file_out.close(); // Close the file after writing
+
             // Add the product to the cart
             cart.addToCart(cur);
-
-            // Open the file in read mode
         }
         else
         {

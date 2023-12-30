@@ -1,10 +1,15 @@
-Product ID: 2
-Product Name: mobile
-Product Price: 100000
-Product Quantity: 100
-------------------------
 Product ID: 1
-Product Name: soap
-Product Price: 50
+Product Name: mobile
+Product Price: 25000
+Product Quantity: 99
+------------------------
+Product ID: 3
+Product Name: power
+Product Price: 2500
+Product Quantity: 50
+------------------------
+Product ID: 2
+Product Name: charger
+Product Price: 2500
 Product Quantity: 100
 ------------------------
