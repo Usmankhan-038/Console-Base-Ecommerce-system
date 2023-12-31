@@ -1,7 +1,7 @@
 Product ID: 1
 Product Name: Mobile
 Product Price: 25000
-Product Quantity: 99
+Product Quantity: 98
 ------------------------
 Product ID: 2
 Product Name: charger
@@ -23,18 +23,23 @@ Product Name: dsgv
 Product Price: 21
 Product Quantity: 12
 ------------------------
-Product ID: 6
-Product Name: ffss
-Product Price: 25
-Product Quantity: 2
+Product ID: 82
+Product Name: jhgj
+Product Price: 2.000000
+Product Quantity: 0
 ------------------------
 Product ID: 8
 Product Name: sfar
 Product Price: 25
-Product Quantity: 25
+Product Quantity: 24
 ------------------------
 Product ID: 22
 Product Name: jhhhggg
 Product Price: 2500.000000
-Product Quantity: 199
+Product Quantity: 198
+------------------------
+Product ID: 10
+Product Name: vgjf
+Product Price: 250
+Product Quantity: 250
 ------------------------
