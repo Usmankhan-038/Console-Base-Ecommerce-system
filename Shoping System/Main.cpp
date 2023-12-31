@@ -19,6 +19,7 @@ int search(int);
 int display();
 string check(int);       //   for checking quantity
 int main();
+void administator();
 ////////////////////////////////////////////////////////////////////
 struct node
 {
@@ -221,99 +222,113 @@ void beg()
     double pre;            //  pre for price
     struct node* t = new node;
     struct node* p = head;
-
-    while (true) {
-        cout << "\t\t\tEnter product ID (integer only):-";
-        cin >> id;
-        if (cin.fail()) {
-            cin.clear();
-            //cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cin.ignore();
-            cout << "Invalid input. Please enter a valid product ID.\n";
-        }
-        else {
-            // Check if the product already exists
-            if (search(id) != -1) {
-                cout << "A product with this ID already exists. Please enter a different ID.\n";
-                continue;
+    char option;
+    while (true)
+    {
+        system("cls");
+        while (true) {
+            cout << "\t\t\tEnter product ID (integer only):-";
+            cin >> id;
+            if (cin.fail()) {
+                cin.clear();
+                //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin.ignore();
+                cout << "Invalid input. Please enter a valid product ID.\n";
             }
-            break;
+            else {
+                // Check if the product already exists
+                if (search(id) != -1) {
+                    cout << "A product with this ID already exists. Please enter a different ID.\n";
+                    continue;
+                }
+                break;
+            }
         }
-    }
-    t->ID = id;
+        t->ID = id;
 
-    while (true) {
-        cout << "\t\t\tEnter product Name (no numbers or special characters allowed):-";
-        cin >> name;
-        if (!all_of(name.begin(), name.end(), ::isalnum)) {
-            cout << "Invalid input. Please enter a valid product name without numbers or special characters.\n";
+        while (true) {
+            cout << "\t\t\tEnter product Name (no numbers or special characters allowed):-";
+            cin >> name;
+            if (!all_of(name.begin(), name.end(), ::isalnum)) {
+                cout << "Invalid input. Please enter a valid product name without numbers or special characters.\n";
+            }
+            else {
+                break;
+            }
         }
-        else {
-            break;
-        }
-    }
-    t->proName = name;
+        t->proName = name;
 
-    while (true) {
-        cout << "\t\t\tEnter product price (number only):-";
-        cin >> pre;
-        if (cin.fail()) {
-            cin.clear();
-            //cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cin.ignore();
-            cout << "Invalid input. Please enter a valid product price.\n";
+        while (true) {
+            cout << "\t\t\tEnter product price (number only):-";
+            cin >> pre;
+            if (cin.fail()) {
+                cin.clear();
+                //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin.ignore();
+                cout << "Invalid input. Please enter a valid product price.\n";
+            }
+            else {
+                break;
+            }
         }
-        else {
-            break;
-        }
-    }
-    t->prePrice = pre;
+        t->prePrice = pre;
 
-    while (true) {
-        cout << "\t\t\tEnter product quantity (integer only):-";
-        cin >> quant;
-        if (cin.fail()) {
-            cin.clear();
-            //cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cin.ignore();
-            cout << "Invalid input. Please enter a valid product quantity.\n";
+        while (true) {
+            cout << "\t\t\tEnter product quantity (integer only):-";
+            cin >> quant;
+            if (cin.fail()) {
+                cin.clear();
+                //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin.ignore();
+                cout << "Invalid input. Please enter a valid product quantity.\n";
+            }
+            else {
+                break;
+            }
         }
-        else {
-            break;
-        }
-    }
 
-    t->quantity = quant;
+        t->quantity = quant;
 
-    if (head == NULL)
-    {
-        t->next = head;
-        head = t;
-    }
-    else
-    {
-        while (p->next != NULL)
+        if (head == NULL)
         {
-            p = p->next;
+            t->next = head;
+            head = t;
         }
-        p->next = t;
-        t->next = NULL;
+        else
+        {
+            while (p->next != NULL)
+            {
+                p = p->next;
+            }
+            p->next = t;
+            t->next = NULL;
+        }
+        system("cls");
+        cout << "\n\n\t\t\t\tThis product is Inserted!\n\n\n";
+
+        // Open the file in append mode
+        ofstream file("products.txt", ios::app);
+
+        // Write the product details to the file
+        file << "Product ID: " << id << "\n";
+        file << "Product Name: " << name << "\n";
+        file << "Product Price: " << pre << "\n";
+        file << "Product Quantity: " << quant << "\n";
+        file << "------------------------\n";
+
+        // Close the file
+        file.close();
+
+        cout << "\n\n\t\t\t\tDo you Want add another Product[Y/N]: ";
+        cin >> option;
+
+        if (option == 'Y' || option == 'y')
+            continue;
+        else if (option == 'N' || option == 'n')
+            administator();
+           
     }
-    system("cls");
-    cout << "\n\n\t\t\t\tThis product is Inserted!\n\n\n";
-
-    // Open the file in append mode
-    ofstream file("products.txt", ios::app);
-
-    // Write the product details to the file
-    file << "Product ID: " << id << "\n";
-    file << "Product Name: " << name << "\n";
-    file << "Product Price: " << pre << "\n";
-    file << "Product Quantity: " << quant << "\n";
-    file << "------------------------\n";
-
-    // Close the file
-    file.close();
+    
 }
 ///////////////////////////////////////////////////////////////////////////////////////////
 int search(int id) {
@@ -346,115 +361,13 @@ void delPro()
     int id;
     struct node* cur = head;
     struct node* pre = head;
-    cout << "\n\nEnter ID to delete that product:\n\n";
-    while (true) {
-        cin >> id;
-        if (cin.fail()) {
-            cin.clear();
-            //cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cin.ignore();
-            cout << "Invalid input. Please enter a valid product ID.\n";
-        }
-        else {
-            break;
-        }
-    }
-    if (head == NULL)
+    char option;
+    while (true)
     {
         system("cls");
-        cout << "List is empty" << endl;
-        return; // Return if the list is empty
-    }
-    int pos = 0;
-    int count = display();               //   for load no of nodes
-    pos = search(id);                        //   for check weather desire node is exist or not
-    if (pos <= count) {
-
-        while (cur->ID != id) {                //  for delete middle area products
-            pre = cur;
-            cur = cur->next;
-        }
-        pre->next = cur->next;
-        system("cls");
-        cout << "\n<<item is deleted>>\n";
-        // Open the file in read mode
-        ifstream file("products.txt");
-
-        // Check if the file is open
-        if (!file.is_open()) {
-            cout << "Unable to open file";
-            return;
-        }
-        // Vector to hold all products
-        vector<string> products;
-        string line;
-        while (getline(file, line)) {
-            // Read the product details from the file
-            string idStr = line.substr(12); // Get the ID
-            if (stoi(idStr) == cur->ID) {
-                // This is the product we want to delete
-                // Skip the product details in the file
-                for (int i = 0; i < 4; i++) {
-                    getline(file, line);
-                }
-            }
-            else {
-                // This is not the product we want to delete
-                // Store the product details in the vector as is
-                products.push_back(line);
-                for (int i = 0; i < 4; i++) {
-                    getline(file, line);
-                    products.push_back(line);
-                }
-            }
-        }
-
-        // Close the file
-        file.close();
-
-        // Open the file in write mode
-        ofstream fileOut("products.txt");
-
-        // Write all the products back to the file
-        for (const string& product : products) {
-            fileOut << product << "\n";
-        }
-
-        // Close the file
-        fileOut.close();
-
-        // Delete the node from the linked list
-        delete cur;
-    }
-    else {
-        cout << "\n<<<Not found>>\n\n";
-    }
-}
-//////////////////////////////////////////////////////////////////////////////////
-void modify()
-{
-    display();
-    cout << "\n\nEnter ID to modify product Name and its price:\n";
-    int id;
-    cin >> id;
-    struct node* cur = head;
-    int pos = search(id); // Check if the ID exists in the list
-    if (pos != -1)
-    {
-        while (cur->ID != id)
-        {
-            cur = cur->next;
-        }
-        cout << "\nOld ID : " << cur->ID << endl;
-        cout << "\nOld Name : " << cur->proName << endl;
-        cout << "\nOld Price : " << cur->prePrice << endl;
-        cout << "\nOld Quantity : " << cur->quantity << endl;
-
-        cout << endl << endl;
-        int nid;
+        cout << "\n\nEnter ID to delete that product:\n\n";
         while (true) {
-            cout << "Enter new ID:";
-            cin >> nid;
+            cin >> id;
             if (cin.fail()) {
                 cin.clear();
                 //cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -465,108 +378,245 @@ void modify()
                 break;
             }
         }
-        string pName;
-        while (true) {
-            cout << "Enter new Name:";
-            cin >> pName;
-            if (!all_of(pName.begin(), pName.end(), ::isalnum)) {
-                cout << "Invalid input. Please enter a valid product name without numbers or special characters.\n";
-            }
-            else {
-                break;
-            }
+        if (head == NULL)
+        {
+            system("cls");
+            cout << "List is empty" << endl;
+            return; // Return if the list is empty
         }
-        double pre;
-        while (true) {
-            cout << "Enter new Price:";
-            cin >> pre;
-            if (cin.fail()) {
-                cin.clear();
-                //cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cin.ignore();
-                cout << "Invalid input. Please enter a valid product price.\n";
-            }
-            else {
-                break;
-            }
-        }
-        int nq;
-        while (true) {
-            cout << "Enter new Quantity:";
-            cin >> nq;
-            if (cin.fail()) {
-                cin.clear();
-                //cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cin.ignore();
-                cout << "Invalid input. Please enter a valid product quantity.\n";
-            }
-            else {
-                break;
-            }
-        }
-        // Open the file in read mode
-        ifstream file("products.txt");
+        int pos = 0;
+        int count = display();               //   for load no of nodes
+        pos = search(id);                        //   for check weather desire node is exist or not
+        if (pos <= count) {
 
-        // Check if the file is open
-        if (!file.is_open()) {
-            cout << "Unable to open file";
-            return;
-        }
+            while (cur->ID != id) {                //  for delete middle area products
+                pre = cur;
+                cur = cur->next;
+            }
+            pre->next = cur->next;
+            system("cls");
+            cout << "\n<<item is deleted>>\n";
+            // Open the file in read mode
+            ifstream file("products.txt");
 
-        // Vector to hold all products
-        vector<string> products;
-
-        string line;
-        while (getline(file, line)) {
-            // Read the product details from the file
-            string idStr = line.substr(12); // Get the ID
-            if (stoi(idStr) == cur->ID) {
-                // This is the product we want to modify
-                // Store the new product details in the vector
-                products.push_back("Product ID: " + to_string(nid));
-                products.push_back("Product Name: " + pName);
-                products.push_back("Product Price: " + to_string(pre));
-                products.push_back("Product Quantity: " + to_string(nq));
-                products.push_back("------------------------");
-                // Skip the old product details in the file
-                for (int i = 0; i < 4; i++) {
-                    getline(file, line);
+            // Check if the file is open
+            if (!file.is_open()) {
+                cout << "Unable to open file";
+                return;
+            }
+            // Vector to hold all products
+            vector<string> products;
+            string line;
+            while (getline(file, line)) {
+                // Read the product details from the file
+                string idStr = line.substr(12); // Get the ID
+                if (stoi(idStr) == cur->ID) {
+                    // This is the product we want to delete
+                    // Skip the product details in the file
+                    for (int i = 0; i < 4; i++) {
+                        getline(file, line);
+                    }
                 }
-            }
-            else {
-                // This is not the product we want to modify
-                // Store the product details in the vector as is
-                products.push_back(line);
-                for (int i = 0; i < 4; i++) {
-                    getline(file, line);
+                else {
+                    // This is not the product we want to delete
+                    // Store the product details in the vector as is
                     products.push_back(line);
+                    for (int i = 0; i < 4; i++) {
+                        getline(file, line);
+                        products.push_back(line);
+                    }
                 }
             }
+
+            // Close the file
+            file.close();
+
+            // Open the file in write mode
+            ofstream fileOut("products.txt");
+
+            // Write all the products back to the file
+            for (const string& product : products) {
+                fileOut << product << "\n";
+            }
+
+            // Close the file
+            fileOut.close();
+
+            // Delete the node from the linked list
+            delete cur;
         }
-
-        // Close the file
-        file.close();
-
-        // Open the file in write mode
-        ofstream fileOut("products.txt");
-
-        // Write all the products back to the file
-        for (const string& product : products) {
-            fileOut << product << "\n";
+        else {
+            cout << "\n<<<Not found>>\n\n";
         }
+        cout << "\n\nDo you Want Delete another Product[Y/N]: ";
+        cin >> option;
 
-        // Close the file
-        fileOut.close();
-
-        // Update the product details in the linked list
-        cur->ID = nid;
-        cur->proName = pName;
-        cur->prePrice = pre;
-        cur->quantity = nq;
+        if (option == 'Y' || option == 'y')
+            continue;
+        else if (option == 'N' || option == 'n')
+            administator();
     }
-    else
+   
+}
+//////////////////////////////////////////////////////////////////////////////////
+void modify()
+{
+    char option;
+    while (true)
     {
-        cout << id << " is <<<Not found>>\n\n";
+        display();
+        cout << "\n\nEnter ID to modify product Name and its price:\n";
+        int id;
+        cin >> id;
+        struct node* cur = head;
+        int pos = search(id); // Check if the ID exists in the list
+        if (pos != -1)
+        {
+            while (cur->ID != id)
+            {
+                cur = cur->next;
+            }
+            cout << "\nOld ID : " << cur->ID << endl;
+            cout << "\nOld Name : " << cur->proName << endl;
+            cout << "\nOld Price : " << cur->prePrice << endl;
+            cout << "\nOld Quantity : " << cur->quantity << endl;
+
+            cout << endl << endl;
+            int nid;
+            while (true) {
+                cout << "Enter new ID:";
+                cin >> nid;
+                if (cin.fail()) {
+                    cin.clear();
+                    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cin.ignore();
+                    cout << "Invalid input. Please enter a valid product ID.\n";
+                }
+                else {
+                    break;
+                }
+            }
+            string pName;
+            while (true) {
+                cout << "Enter new Name:";
+                cin >> pName;
+                if (!all_of(pName.begin(), pName.end(), ::isalnum)) {
+                    cout << "Invalid input. Please enter a valid product name without numbers or special characters.\n";
+                }
+                else {
+                    break;
+                }
+            }
+            double pre;
+            while (true) {
+                cout << "Enter new Price:";
+                cin >> pre;
+                if (cin.fail()) {
+                    cin.clear();
+                    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cin.ignore();
+                    cout << "Invalid input. Please enter a valid product price.\n";
+                }
+                else {
+                    break;
+                }
+            }
+            int nq;
+            while (true) {
+                cout << "Enter new Quantity:";
+                cin >> nq;
+                if (cin.fail()) {
+                    cin.clear();
+                    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cin.ignore();
+                    cout << "Invalid input. Please enter a valid product quantity.\n";
+                }
+                else {
+                    break;
+                }
+            }
+            // Open the file in read mode
+            ifstream file("products.txt");
+
+            // Check if the file is open
+            if (!file.is_open()) {
+                cout << "Unable to open file";
+                return;
+            }
+
+            // Vector to hold all products
+            vector<string> products;
+
+            string line;
+            while (getline(file, line)) {
+                // Read the product details from the file
+                string idStr = line.substr(12); // Get the ID
+                if (stoi(idStr) == cur->ID) {
+                    // This is the product we want to modify
+                    // Store the new product details in the vector
+                    products.push_back("Product ID: " + to_string(nid));
+                    products.push_back("Product Name: " + pName);
+                    products.push_back("Product Price: " + to_string(pre));
+                    products.push_back("Product Quantity: " + to_string(nq));
+                    products.push_back("------------------------");
+                    // Skip the old product details in the file
+                    for (int i = 0; i < 4; i++) {
+                        getline(file, line);
+                    }
+                }
+                else {
+                    // This is not the product we want to modify
+                    // Store the product details in the vector as is
+                    products.push_back(line);
+                    for (int i = 0; i < 4; i++) {
+                        getline(file, line);
+                        products.push_back(line);
+                    }
+                }
+            }
+
+            // Close the file
+            file.close();
+
+            // Open the file in write mode
+            ofstream fileOut("products.txt");
+
+            // Write all the products back to the file
+            for (const string& product : products) {
+                fileOut << product << "\n";
+            }
+
+            // Close the file
+            fileOut.close();
+
+            // Update the product details in the linked list
+            cur->ID = nid;
+            cur->proName = pName;
+            cur->prePrice = pre;
+            cur->quantity = nq;
+        }
+        else
+        {
+            cout << id << " is <<<Not found>>\n\n";
+        }
+        while (true)
+        {
+            cout << "\n\n\Do you Want Modify another Product[Y/N]: ";
+            cin >> option;
+
+            
+            if (option == 'Y' || option == 'y')
+                break;
+            else if (option == 'N' || option == 'n')
+                administator();
+            else
+                continue;
+
+            
+        }
+        if (option == 'Y' || option == 'y')
+            continue;
+       
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////
@@ -661,6 +711,7 @@ int display()
     file.close();
 
     cout << "\nTotal products in our store is : " << c << "\n\n\n";
+    system("pause");
     return c;
 }
 
@@ -682,180 +733,195 @@ string check(int quant)
 ///////////////////////////////////////////////////////////////////////
 void buy(Cart& cart)
 {
-    fstream file("products.txt");
-    system("cls");
-    display();
-    string products[20];
-    int pay = 0, no, c = 0, price, id, i = 1;
-    struct node* cur = head;
-
-    if (head == NULL)
+    char option;
+    while (true)
     {
-        cout << "\n<<<<There is no items to buy>>>>\n\n";
-        return;
-    }
-    cout << "How many products you want to buy : ";
-    while (!(cin >> no) || no < 1) {
-        cin.clear();
-        //cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cin.ignore();
-        cout << "Invalid input. Please enter a positive integer.\n";
-    }
+        fstream file("products.txt");
+        system("cls");
+        display();
+        string products[20];
+        int pay = 0, no, c = 0, price, id, i = 1;
+        struct node* cur = head;
+
+        if (head == NULL)
+        {
+            cout << "\n<<<<There is no items to buy>>>>\n\n";
+            return;
+        }
+        cout << "How many products you want to buy : ";
+        while (!(cin >> no) || no < 1) {
+            cin.clear();
+            //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cin.ignore();
+            cout << "Invalid input. Please enter a positive integer.\n";
+        }
 
 
-    display();
+        display();
 
-    while (i <= no) {
+        while (i <= no) {
+            while (true) {
+                cout << "\n\nEnter ID of product " << i << " : ";
+                cin >> id;
+                if (cin.fail()) {
+                    cin.clear();
+                    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cin.ignore();
+                    cout << "Invalid input. Please enter a valid product ID.\n";
+                }
+                else {
+                    break;
+                }
+            }
+
+
+
+            if (id == -1) {
+                system("cls");
+                return;
+            }
+
+            string line, des, predata;
+            int data;
+            int pos = search(id);
+            if (pos != -1) {
+                cur = head;
+                while (cur != NULL && cur->ID != id) {
+                    cur = cur->next;
+                }
+                if (cur != NULL) {
+                    cur->quantity -= 1; // Decrease the quantity of the product
+                }
+
+                products[c] = cur->proName;
+                c++;
+                pay = pay + (cur->prePrice);
+                i++;
+                int data;
+                string line;
+                vector<string> products;
+                products.clear();
+                ifstream file("products.txt"); // Open the file in read mode
+                if (!file) {
+                    cout << "Unable to open file";
+                    return; // terminate with error
+                }
+                int reverse = 5;
+                while (getline(file, line)) {
+                    // Read the product details from the file
+                    string pre = line.substr(12); // Get the ID
+                    string line1 = line; // Store the line in a variable
+                    getline(file, line);
+                    string name = line.substr(14); // Get the name
+                    string line2 = line; // Store the line in a variable
+                    getline(file, line);
+                    string price = line.substr(15); // Get the price
+                    string line3 = line; // Store the line in a variable
+                    getline(file, line);
+                    string quantity;
+                    if (line.length() > 18) {
+                        quantity = line.substr(18); // Get the quantity
+                    }
+                    else {
+                        cout << "Invalid line format in products.txt" << endl;
+                    }
+                    string line4 = line; // Store the line in a variable
+
+                    // Skip the separator line
+                    data = stoi(pre);
+                    int nq = stoi(quantity);
+                    nq -= 1;
+
+                    if (data == id)
+                    {
+                        // This is the product we want to modify
+                        // Store the new product details in the vector
+                        products.push_back("Product ID: " + to_string(data));
+                        products.push_back("Product Name: " + name);
+                        products.push_back("Product Price: " + price);
+                        products.push_back("Product Quantity: " + to_string(nq));
+                        products.push_back("------------------------");
+                        getline(file, line);
+                        // Skip the old product details in the file
+                        /*file.seekg(reverse - 5);
+                        file.clear();
+                        for (int i = 0; i < 5; i++) {
+                            getline(file, line);
+                            reverse++;
+                        }*/
+                    }
+                    else {
+                        // This is not the product we want to modify
+                        // Store the product details in the vector as is
+                        products.push_back(line1);
+                        products.push_back(line2);
+                        products.push_back(line3);
+                        products.push_back(line4);
+                        products.push_back("------------------------");
+                        getline(file, line);
+                        reverse = reverse + 5;
+                    }
+
+                    c = c + 1;
+                }
+
+                file.close(); // Close the file after reading
+
+                ofstream file_out("products.txt"); // Open the file in write mode
+                for (int i = 0; i < products.size(); i++)
+                    file_out << products[i] << "\n"; // Write the product details back to the file
+                file_out.close(); // Close the file after writing
+
+                // Add the product to the cart
+                cart.addToCart(cur);
+            }
+            else
+            {
+                cout << "\n<<<<<<<<<This item is not available in our store at this time>>>>\n\n";
+                continue;
+            }
+        }
+
+        string customer;
         while (true) {
-            cout << "\n\nEnter ID of product " << i << " : ";
-            cin >> id;
-            if (cin.fail()) {
-                cin.clear();
-                //cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cin.ignore();
-                cout << "Invalid input. Please enter a valid product ID.\n";
+            cout << "Enter your name: ";
+            cin >> customer;
+            if (!all_of(customer.begin(), customer.end(), ::isalpha)) {
+                cout << "Invalid input. Please enter a valid name without numbers or special characters.\n";
             }
             else {
                 break;
             }
         }
+        enqueue(customer);
 
-
-
-        if (id == -1) {
-            system("cls");
-            return;
-        }
-
-        string line, des, predata;
-        int data;
-        int pos = search(id);
-        if (pos != -1) {
-            cur = head;
-            while (cur != NULL && cur->ID != id) {
-                cur = cur->next;
-            }
-            if (cur != NULL) {
-                cur->quantity -= 1; // Decrease the quantity of the product
-            }
-
-            products[c] = cur->proName;
-            c++;
-            pay = pay + (cur->prePrice);
-            i++;
-            int data;
-            string line;
-            vector<string> products;
-            products.clear();
-            ifstream file("products.txt"); // Open the file in read mode
-            if (!file) {
-                cout << "Unable to open file";
-                return; // terminate with error
-            }
-            int reverse = 5;
-            while (getline(file, line)) {
-                // Read the product details from the file
-                string pre = line.substr(12); // Get the ID
-                getline(file, line);
-                string name = line.substr(14); // Get the name
-                getline(file, line);
-                string price = line.substr(15); // Get the price
-                getline(file, line);
-                string quantity;
-                if (line.length() > 18) {
-                    quantity = line.substr(18); // Get the quantity
-                }
-                else {
-                    cout << "Invalid line format in products.txt" << endl;
-                }
-                getline(file, line);
-
-                 // Skip the separator line
-                data = stoi(pre);
-                int nq = stoi(quantity);
-                nq -= 1;
-
-                if (data == id)
-                {
-                    // This is the product we want to modify
-                    // Store the new product details in the vector
-                    products.push_back("Product ID: " + to_string(data));
-                    products.push_back("Product Name: " + name);
-                    products.push_back("Product Price: " + price);
-                    products.push_back("Product Quantity: " + to_string(nq));
-                    products.push_back("------------------------");
-                    // Skip the old product details in the file
-                    file.seekg(reverse-5);
-                    file.clear();
-                    for (int i = 0; i < 5; i++) {
-                        getline(file, line);
-                        reverse++;
-                    }
-                   
-
-                }
-                else {
-                    // This is not the product we want to modify
-                    // Store the product details in the vector as is
-                    //products.push_back(line);
-                    file.seekg(reverse -5);
-                    file.clear();
-                    for (int i = 0; i < 5; i++) {
-                        getline(file, line);
-                        products.push_back(line);
-                        reverse++;
-                    }
-                    //products.push_back("------------------------");
-                }
-                
-                c = c + 1;
-            }
-            file.close(); // Close the file after reading
-
-            ofstream file_out("products.txt"); // Open the file in write mode
-            for (int i = 0; i < products.size(); i++)
-                file_out << products[i] << "\n"; // Write the product details back to the file
-            file_out.close(); // Close the file after writing
-
-            // Add the product to the cart
-            cart.addToCart(cur);
-        }
-        else
+        system("cls");
+        cout << "\n\n\n\n\t\t\tYou have bought : ";
+        for (int i = 0; i < no; i++)
         {
-            cout << "\n<<<<<<<<<This item is not available in our store at this time>>>>\n\n";
+            cout << products[i] << ",";
+        }
+        price = pay * (0.90);
+        cout << "\n\nOriginal price : " << pay;
+        cout << "\n with 10% discount: " << price << "\nThank you! for the shopping\n\n";
+
+        // Checkout and calculate the total bill
+        cart.checkout();
+
+        cout << "\n\nDo you Want Buy another Product[Y/N]: ";
+        cin >> option;
+
+        if (option == 'Y' || option == 'y')
             continue;
-        }
+        else if (option == 'N' || option == 'n')
+            administator();
     }
-
-    string customer;
-    while (true) {
-        cout << "Enter your name: ";
-        cin >> customer;
-        if (!all_of(customer.begin(), customer.end(), ::isalpha)) {
-            cout << "Invalid input. Please enter a valid name without numbers or special characters.\n";
-        }
-        else {
-            break;
-        }
-    }
-    enqueue(customer);
-
-    system("cls");
-    cout << "\n\n\n\n\t\t\tYou have bought : ";
-    for (int i = 0; i < no; i++)
-    {
-        cout << products[i] << ",";
-    }
-    price = pay * (0.90);
-    cout << "\n\nOriginal price : " << pay;
-    cout << "\n with 10% discount: " << price << "\nThank you! for the shopping\n\n";
-
-    // Checkout and calculate the total bill
-    cart.checkout();
+    
 }
 /////////////////////////////////////////////////////////////////////////
 void hashAndShowProducts() {
     // Hash the products
+    
     fstream file("products.txt");
 
     // Check if the file is open
@@ -917,16 +983,19 @@ void hashAndShowProducts() {
     // Close the file
     fileIn.close();
 }
-/////////////////////////////////////////////////////////////////////////////////////////
-void administator()
+void administator();
+void adminLogin()
 {
     Login admin;
     system("cls");
-    int ch;
+    
     string username, password;
     int loginAttempts = 0;
     bool loginSuccess = false;
     do {
+        system("pause");
+        system("cls");
+        cout << "\n<< Administrator Login >>" << endl;
         cout << "Enter username: ";
         cin >> username;
         cout << "Enter password: ";
@@ -934,6 +1003,7 @@ void administator()
         if (admin.checkAdminLogin(username, password)) {
             cout << "Access granted." << endl;
             loginSuccess = true;
+            administator();
             break;
         }
         else {
@@ -950,7 +1020,14 @@ void administator()
         system("pause");
         return;
     }
+}
+/////////////////////////////////////////////////////////////////////////////////////////
+void administator()
+{
+    int ch;
     do {
+       
+        system("cls");
         cout << "\t\t============================================" << endl;
         cout << "\t\t|          Administator Portal              |" << endl;
         cout << "\t\t============================================" << endl;
@@ -978,7 +1055,7 @@ void administator()
         switch (ch) {
         case 0:
             system("cls");
-            return;
+            main();
         case 1:
             beg();
             break;
@@ -1008,12 +1085,17 @@ void administator()
             system("cls");
             cout << "|============CUSTOMERS NAMES LIST==============|" << endl;
             displayQueue();
+            cout << "\n\n";
+            system("pause");
             break;
         case 6:
             system("cls");
             cout << "|============CUSTOMERS NAMES LIST==============|" << endl;
             dequeue();
             displayQueue();
+            cout << "\n\n";
+            system("pause");
+
             break;
         case 7:
             int x, n;
@@ -1044,6 +1126,8 @@ void administator()
                 }
             }
             cout << "Hash of " << x << " is = " << ::hash(x, n);
+            cout << "\n\n";
+            system("pause");
             break;
         case 8:
             hashAndShowProducts();
@@ -1104,16 +1188,32 @@ int main()
 
     switch (ch) {
     case 1:
-        administator();
+    {
+       
+       adminLogin();
+    }
+        
         break;
     case 2:
     {
         UserAuth user;
         int userChoice;
-        cout << "1) Log in\n";
-        cout << "2) Sign up\n";
-        cout << "Enter your choice: ";
-        cin >> userChoice;
+        system("cls");
+        while (true)
+        {
+            cout << "1) Log in\n";
+            cout << "2) Sign up\n";
+            cout << "Enter your choice: ";
+            cin >> userChoice;
+            if (userChoice != 1 && userChoice != 2)
+            {
+                cout << "Invalid Choice";
+                system("pause");
+                continue;
+            }
+            break;
+            
+        }
         if (userChoice == 1) {
             if (user.login()) {
                 cout << endl << endl;
@@ -1130,6 +1230,7 @@ int main()
             system("pause");
             buy(cart);
         }
+ 
         break;
     }
     case 3:

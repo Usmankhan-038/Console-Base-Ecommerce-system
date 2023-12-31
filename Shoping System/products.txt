@@ -1,15 +1,40 @@
 Product ID: 1
-Product Name: mobile
+Product Name: Mobile
 Product Price: 25000
 Product Quantity: 99
-------------------------
-Product ID: 3
-Product Name: power
-Product Price: 2500
-Product Quantity: 50
 ------------------------
 Product ID: 2
 Product Name: charger
 Product Price: 2500
-Product Quantity: 100
+Product Quantity: 98
+------------------------
+Product ID: 3
+Product Name: Power
+Product Price: 5200
+Product Quantity: 99
+------------------------
+Product ID: 5
+Product Name: 25
+Product Price: 22
+Product Quantity: 20
+------------------------
+Product ID: 4
+Product Name: dsgv
+Product Price: 21
+Product Quantity: 12
+------------------------
+Product ID: 6
+Product Name: ffss
+Product Price: 25
+Product Quantity: 2
+------------------------
+Product ID: 8
+Product Name: sfar
+Product Price: 25
+Product Quantity: 25
+------------------------
+Product ID: 22
+Product Name: jhhhggg
+Product Price: 2500.000000
+Product Quantity: 199
 ------------------------
