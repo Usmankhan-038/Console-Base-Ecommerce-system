@@ -1126,7 +1126,7 @@ void administator()
                 }
                 else {
                     break;
-                }
+                } 
             }
             while (true) {
                 cout << "Of total list number : ";
