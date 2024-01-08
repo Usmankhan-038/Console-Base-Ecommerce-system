@@ -1,0 +1,20 @@
+Customer Name: rafay
+Product: 25, sfar, 
+Original price : 47
+10% discount: 61
+Customer Name: rafay
+Product: 25, sfar, 
+Original price : 47
+10% discount: 61
+Customer Name: rafay
+Product: 25, sfar, 
+Original price : 47
+10% discount: 61
+Customer Name: rafay
+Product: 25, 
+Original price : 22
+10% discount: 19
+Customer Name: rafay
+Product: 25, 25, sfar, 
+Original price : 69
+10% discount: 120
