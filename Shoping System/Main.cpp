@@ -665,6 +665,7 @@ void loadProducts() {
 }
 int display()
 {
+    system("color E");
     system("cls");
     int c = 0; // c for count products
 
@@ -683,6 +684,7 @@ int display()
 
     string line;
     while (getline(file, line)) {
+        system("color E");
         // Read the product details from the file
         string id = line.substr(12); // Get the ID
         getline(file, line);
@@ -700,7 +702,18 @@ int display()
         getline(file, line); // Skip the separator line
 
         if (!quantity.empty() && all_of(quantity.begin(), quantity.end(), ::isdigit)) {
-            cout << id << "\t\t" << name << "\t\t\t" << price << "\t\t\t" << check(stoi(quantity)) << "\n"; // call check func and pass quantity
+            cout << id << "\t\t" << name << "\t\t\t" << price << "\t\t\t";
+            if (check(stoi(quantity)) == "out of stock!")
+            {
+                system("color 4");
+                cout << check(stoi(quantity)) << "\n"; // call check func and pass quantity
+                system("color E");
+            }
+            else
+            {
+                cout << check(stoi(quantity)) << "\n"; // call check func and pass quantity
+
+            }
         }
         else {
             cout << "Invalid quantity format in products.txt" << endl;
@@ -723,9 +736,11 @@ string check(int quant)
     stringstream ss;
     ss << a;
     string quantity = ss.str();
-
     if (quant <= 0)
+    {
         return "out of stock!";
+        
+    }
     else
         return quantity;
 }
@@ -733,10 +748,13 @@ string check(int quant)
 ///////////////////////////////////////////////////////////////////////
 void buy(Cart& cart)
 {
+    int pay = 0, no, c = 0, price = 0, id, i = 1;
     char option;
     int cho;
+   // string productsPurch;
     while (true)
     {
+
         system("cls");
         cout << "[1] For Buy Product" << endl;
         cout << "[2] Logout" << endl;
@@ -750,7 +768,7 @@ void buy(Cart& cart)
             system("cls");
             display();
             string products[20];
-            int pay = 0, no, c = 0, price, id, i = 1;
+            int no, c = 0, id, i = 1;
             struct node* cur = head;
 
             if (head == NULL)
@@ -909,9 +927,12 @@ void buy(Cart& cart)
             cout << "\n\n\n\n\t\t\tYou have bought : ";
             for (int i = 0; i < no; i++)
             {
+               // productsPurch += products[i] + ",";
                 cout << products[i] << ",";
+               
             }
-            price = pay * (0.90);
+            
+            price += pay * (0.90);
             cout << "\n\nOriginal price : " << pay;
             cout << "\n with 10% discount: " << price << "\nThank you! for the shopping\n\n";
 
@@ -920,11 +941,20 @@ void buy(Cart& cart)
 
             cout << "\n\nDo you Want Buy another Product[Y/N]: ";
             cin >> option;
+            fstream customerFile;
+            customerFile.open("customerDetail.txt");
 
             if (option == 'Y' || option == 'y')
                 continue;
             else if (option == 'N' || option == 'n')
-                administator();
+            {
+                if (customerFile.is_open())
+                {
+                    customerFile << "Customer Name: "<< customer <<"\nProduct: \nOriginal price : " << pay << "\n with 10% discount: " << price;
+                }
+                continue;
+            }
+               
         }
         break;
         case 2:
@@ -1164,11 +1194,11 @@ int main()
 
         push(i);
     }
-    system("color F1");     //  for console color
+    system("color E");     //  for console color
     gotoxy(17, 5);
     cout << "--------------------------------------------------" << endl;
     gotoxy(17, 7);
-    cout << "||            Shopping Club System                ||" << endl;
+    cout << "||            SnapCart                ||" << endl;
     gotoxy(17, 9);
     cout << "--------------------------------------------------" << endl;
     gotoxy(17, 11);
@@ -1176,11 +1206,12 @@ int main()
     gotoxy(17, 13);
     cout << ">>>----Project Implemented By-----<<<" << endl;
     gotoxy(22, 15);
-    cout << "Abdur Rafay" << endl;
+    cout << "Abdur Rafay(01-131222-005)  &  Abdi Fateh(01-131222-002)" << endl;
+
     gotoxy(22, 16);
     system("pause");
     system("cls");
-    system("color Fc");
+    system("color E");
     int ch;
     do {
         cout << "\n\t\t|--------<Main Menu>-----------|";
@@ -1214,39 +1245,44 @@ int main()
     case 2:
     {
         UserAuth user;
-        int userChoice;
-        system("cls");
+                system("cls");
         while (true)
         {
+           char userChoice;
             cout << "1) Log in\n";
             cout << "2) Sign up\n";
             cout << "Enter your choice: ";
             cin >> userChoice;
-            if (userChoice != 1 && userChoice != 2)
+            if (userChoice != '1' && userChoice != '2')
             {
                 cout << "Invalid Choice";
                 system("pause");
                 continue;
             }
-            break;
-            
-        }
-        if (userChoice == 1) {
-            if (user.login()) {
+            if (userChoice == '1') {
+                if (user.login()) {
+                    cout << endl << endl;
+                    bpop();
+                    system("pause");
+                    buy(cart);
+                }
+                else
+                    continue;
+            }
+            else if (userChoice == '2') {
+                user.signUp();
+                // After sign up, show the shopping trolley
                 cout << endl << endl;
                 bpop();
                 system("pause");
                 buy(cart);
             }
+            break;
+            
         }
-        else if (userChoice == 2) {
-            user.signUp();
-            // After sign up, show the shopping trolley
-            cout << endl << endl;
-            bpop();
-            system("pause");
-            buy(cart);
-        }
+       
+       
+
  
         break;
     }
