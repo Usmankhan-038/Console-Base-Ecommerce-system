@@ -1117,15 +1117,12 @@ void administator()
         cout << "\t\t     Enter 3 for MODIFY Existing product" << endl;
         cout << "\t\t     Enter 4 for Delete a particular product item" << endl;
         cout << "\t\t     Enter 5 for Customers List " << endl;
-        cout << "\t\t     Enter 6 for Dequeue customer" << endl;
-        cout << "\t\t     Enter 7 for Generate hash" << endl;
-        cout << "\t\t     Enter 8 for showing Hash Products" << endl;
-        cout << "\t\t     Enter 9 To Show Customer Purchased Product" << endl;
+        cout << "\t\t     Enter 6 To Show Customer Purchased Product" << endl;
         cout << "\t\t     Enter 0 for Main Menu" << endl;
         cout << "\nEnter Your choice >>>";
         cin >> ch;
 
-        if (cin.fail() || ch < 0 || ch > 9) {
+        if (cin.fail() || ch < 0 || ch > 6) {
             cin.clear();
             //cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cin.ignore();
@@ -1171,52 +1168,9 @@ void administator()
             break;
         case 6:
             system("cls");
-            cout << "|============CUSTOMERS NAMES LIST==============|" << endl;
-            dequeue();
-            displayQueue();
-            cout << "\n\n";
-            system("pause");
-
-            break;
-        case 7:
-            int x, n;
-            while (true) {
-                cout << "Enter element to generate hash = ";
-                cin >> x;
-                if (cin.fail()) {
-                    cin.clear();
-                    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    cin.ignore();
-                    cout << "Invalid input. Please enter a valid integer.\n";
-                }
-                else {
-                    break;
-                } 
-            }
-            while (true) {
-                cout << "Of total list number : ";
-                cin >> n;
-                if (cin.fail()) {
-                    cin.clear();
-                    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    cin.ignore();
-                    cout << "Invalid input. Please enter a valid integer.\n";
-                }
-                else {
-                    break;
-                }
-            }
-            cout << "Hash of " << x << " is = " << ::hash(x, n);
-            cout << "\n\n";
-            system("pause");
-            break;
-        case 8:
-            hashAndShowProducts();
-            system("pause");
-            break;
-        case 9:
             customerPurchasedProduct();
             system("pause");
+
             break;
         default: system("cls");
         }
