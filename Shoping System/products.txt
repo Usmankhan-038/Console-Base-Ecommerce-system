@@ -1,12 +1,12 @@
 Product ID: 1
 Product Name: Mobile
 Product Price: 25000
-Product Quantity: 95
+Product Quantity: 94
 ------------------------
 Product ID: 2
 Product Name: charger
 Product Price: 2500
-Product Quantity: 94
+Product Quantity: 93
 ------------------------
 Product ID: 3
 Product Name: Power

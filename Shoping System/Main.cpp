@@ -513,7 +513,7 @@ void modify()
                 cin >> pre;
                 if (cin.fail()) {
                     cin.clear();
-                    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                  
                     cin.ignore();
                     cout << "Invalid input. Please enter a valid product price.\n";
                 }
@@ -527,7 +527,7 @@ void modify()
                 cin >> nq;
                 if (cin.fail()) {
                     cin.clear();
-                    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                  
                     cin.ignore();
                     cout << "Invalid input. Please enter a valid product quantity.\n";
                 }
@@ -535,31 +535,30 @@ void modify()
                     break;
                 }
             }
-            // Open the file in read mode
+           
             ifstream file("products.txt");
 
-            // Check if the file is open
+            
             if (!file.is_open()) {
                 cout << "Unable to open file";
                 return;
             }
 
-            // Vector to hold all products
+           
             vector<string> products;
 
             string line;
             while (getline(file, line)) {
-                // Read the product details from the file
-                string idStr = line.substr(12); // Get the ID
+                
+                string idStr = line.substr(12);
                 if (stoi(idStr) == cur->ID) {
-                    // This is the product we want to modify
-                    // Store the new product details in the vector
+
                     products.push_back("Product ID: " + to_string(nid));
                     products.push_back("Product Name: " + pName);
                     products.push_back("Product Price: " + to_string(pre));
                     products.push_back("Product Quantity: " + to_string(nq));
                     products.push_back("------------------------");
-                    // Skip the old product details in the file
+
                     for (int i = 0; i < 4; i++) {
                         getline(file, line);
                     }
@@ -597,7 +596,7 @@ void modify()
         }
         else
         {
-            cout << id << " is <<<Not found>>\n\n";
+            cout << id << " is << Not found >>\n\n";
         }
         while (true)
         {
@@ -619,7 +618,7 @@ void modify()
        
     }
 }
-//////////////////////////////////////////////////////////////////////////////////////
+
 void loadProducts() {
     ifstream file("products.txt");
     string line;
@@ -750,7 +749,7 @@ void buy(Cart& cart)
 {
     int pay = 0, no, c = 0, price = 0, id, i = 1;
     char option;
-    int cho;
+    char cho;
     string productsPurch;
     while (true)
     {
@@ -760,9 +759,16 @@ void buy(Cart& cart)
         cout << "[2] Logout" << endl;
         cout << "\nEnter your Choice: ";
         cin >> cho;
+
+        if (cho != '1' && cho != '2')
+        {
+            cout << "\nInvalid Choice\n";
+            system("pause");
+            continue;
+        }
         switch (cho)
         {
-        case 1:
+        case '1':
         {
             
 
@@ -941,13 +947,20 @@ void buy(Cart& cart)
                 cout << "\n with 10% discount: " << price << "\nThank you! for the shopping\n\n";
 
                 // Checkout and calculate the total bill
-                
-
-                cout << "\n\nDo you Want Buy another Product[Y/N]: ";
-                cin >> option;
                 fstream customerFile;
-                customerFile.open("customerDetail.txt", ios::app);
+                while (true)
+                {
+                    cout << "\n\nDo you Want Buy another Product[Y/N]: ";
+                    cin >> option;
                 
+                    customerFile.open("customerDetail.txt", ios::app);
+
+                    if (option == 'Y' || option == 'y' || option == 'N' || option == 'n')
+                        break;
+                    else
+                        continue;
+                }
+               
                 if (option == 'Y' || option == 'y')
                     continue;
                 else if (option == 'N' || option == 'n')
@@ -966,7 +979,7 @@ void buy(Cart& cart)
                
         }
         break;
-        case 2:
+        case '2':
             main();
         }
         }
@@ -984,6 +997,8 @@ void customerPurchasedProduct() {
     if (customerFile.is_open()) {
         while (!customerFile.eof()) {
             cout << "\nCustomer " << i << "\n";
+            getline(customerFile, line);
+            cout << line << "\n";
             getline(customerFile, line);
             cout << line << "\n";
             getline(customerFile, line);
