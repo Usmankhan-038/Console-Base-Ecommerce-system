@@ -751,7 +751,7 @@ void buy(Cart& cart)
     int pay = 0, no, c = 0, price = 0, id, i = 1;
     char option;
     int cho;
-   // string productsPurch;
+    string productsPurch;
     while (true)
     {
 
@@ -764,196 +764,205 @@ void buy(Cart& cart)
         {
         case 1:
         {
-            fstream file("products.txt");
-            system("cls");
-            display();
-            string products[20];
-            int no, c = 0, id, i = 1;
-            struct node* cur = head;
+            
 
-            if (head == NULL)
+
+            
+            while (true)
             {
-                cout << "\n<<<<There is no items to buy>>>>\n\n";
-                return;
-            }
-            cout << "How many products you want to buy : ";
-            while (!(cin >> no) || no < 1) {
-                cin.clear();
-                //cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cin.ignore();
-                cout << "Invalid input. Please enter a positive integer.\n";
-            }
+                fstream file("products.txt");
+                system("cls");
+                display();
+                string products[20];
+                int no, c = 0, id, i = 1;
+                struct node* cur = head;
+
+                if (head == NULL)
+                {
+                    cout << "\n<<<<There is no items to buy>>>>\n\n";
+                    return;
+                }
+                cout << "How many products you want to buy : ";
+                while (!(cin >> no) || no < 1) {
+                    cin.clear();
+                    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cin.ignore();
+                    cout << "Invalid input. Please enter a positive integer.\n";
+                }
+                display();
+                while (i <= no) {
+                    while (true) {
+                        cout << "\n\nEnter ID of product " << i << " : ";
+                        cin >> id;
+                        if (cin.fail()) {
+                            cin.clear();
+                            //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                            cin.ignore();
+                            cout << "Invalid input. Please enter a valid product ID.\n";
+                        }
+                        else {
+                            break;
+                        }
+                    }
 
 
-            display();
 
-            while (i <= no) {
+                    if (id == -1) {
+                        system("cls");
+                        return;
+                    }
+
+                    string line, des, predata;
+                    int data;
+                    int pos = search(id);
+                    if (pos != -1) {
+                        cur = head;
+                        while (cur != NULL && cur->ID != id) {
+                            cur = cur->next;
+                        }
+                        if (cur != NULL) {
+                            cur->quantity -= 1; // Decrease the quantity of the product
+                        }
+
+                        products[c] = cur->proName;
+                        c++;
+                        pay = pay + (cur->prePrice);
+                        i++;
+                        int data;
+                        string line;
+                        vector<string> products;
+                        products.clear();
+                        ifstream file("products.txt"); // Open the file in read mode
+                        if (!file) {
+                            cout << "Unable to open file";
+                            return; // terminate with error
+                        }
+                        int reverse = 5;
+                        while (getline(file, line)) {
+                            // Read the product details from the file
+                            string pre = line.substr(12); // Get the ID
+                            string line1 = line; // Store the line in a variable
+                            getline(file, line);
+                            string name = line.substr(14); // Get the name
+                            string line2 = line; // Store the line in a variable
+                            getline(file, line);
+                            string price = line.substr(15); // Get the price
+                            string line3 = line; // Store the line in a variable
+                            getline(file, line);
+                            string quantity;
+                            if (line.length() > 18) {
+                                quantity = line.substr(18); // Get the quantity
+                            }
+                            else {
+                                cout << "Invalid line format in products.txt" << endl;
+                            }
+                            string line4 = line; // Store the line in a variable
+
+                            // Skip the separator line
+                            data = stoi(pre);
+                            int nq = stoi(quantity);
+                            nq -= 1;
+
+                            if (data == id)
+                            {
+                                // This is the product we want to modify
+                                // Store the new product details in the vector
+                                products.push_back("Product ID: " + to_string(data));
+                                products.push_back("Product Name: " + name);
+                                products.push_back("Product Price: " + price);
+                                products.push_back("Product Quantity: " + to_string(nq));
+                                products.push_back("------------------------");
+                                getline(file, line);
+                                // Skip the old product details in the file
+                                /*file.seekg(reverse - 5);
+                                file.clear();
+                                for (int i = 0; i < 5; i++) {
+                                    getline(file, line);
+                                    reverse++;
+                                }*/
+                            }
+                            else {
+                                // This is not the product we want to modify
+                                // Store the product details in the vector as is
+                                products.push_back(line1);
+                                products.push_back(line2);
+                                products.push_back(line3);
+                                products.push_back(line4);
+                                products.push_back("------------------------");
+                                getline(file, line);
+                                reverse = reverse + 5;
+                            }
+
+                            c = c + 1;
+                        }
+
+                        file.close(); // Close the file after reading
+
+                        ofstream file_out("products.txt"); // Open the file in write mode
+                        for (int i = 0; i < products.size(); i++)
+                            file_out << products[i] << "\n"; // Write the product details back to the file
+                        file_out.close(); // Close the file after writing
+
+                        // Add the product to the cart
+                        cart.addToCart(cur);
+                    }
+                    else
+                    {
+                        cout << "\n<<<<<<<<<This item is not available in our store at this time>>>>\n\n";
+                        continue;
+                    }
+                }
+
+                string customer;
                 while (true) {
-                    cout << "\n\nEnter ID of product " << i << " : ";
-                    cin >> id;
-                    if (cin.fail()) {
-                        cin.clear();
-                        //cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                        cin.ignore();
-                        cout << "Invalid input. Please enter a valid product ID.\n";
+                    cout << "Enter your name: ";
+                    cin >> customer;
+                    if (!all_of(customer.begin(), customer.end(), ::isalpha)) {
+                        cout << "Invalid input. Please enter a valid name without numbers or special characters.\n";
                     }
                     else {
                         break;
                     }
                 }
+                enqueue(customer);
 
-
-
-                if (id == -1) {
-                    system("cls");
-                    return;
-                }
-
-                string line, des, predata;
-                int data;
-                int pos = search(id);
-                if (pos != -1) {
-                    cur = head;
-                    while (cur != NULL && cur->ID != id) {
-                        cur = cur->next;
-                    }
-                    if (cur != NULL) {
-                        cur->quantity -= 1; // Decrease the quantity of the product
-                    }
-
-                    products[c] = cur->proName;
-                    c++;
-                    pay = pay + (cur->prePrice);
-                    i++;
-                    int data;
-                    string line;
-                    vector<string> products;
-                    products.clear();
-                    ifstream file("products.txt"); // Open the file in read mode
-                    if (!file) {
-                        cout << "Unable to open file";
-                        return; // terminate with error
-                    }
-                    int reverse = 5;
-                    while (getline(file, line)) {
-                        // Read the product details from the file
-                        string pre = line.substr(12); // Get the ID
-                        string line1 = line; // Store the line in a variable
-                        getline(file, line);
-                        string name = line.substr(14); // Get the name
-                        string line2 = line; // Store the line in a variable
-                        getline(file, line);
-                        string price = line.substr(15); // Get the price
-                        string line3 = line; // Store the line in a variable
-                        getline(file, line);
-                        string quantity;
-                        if (line.length() > 18) {
-                            quantity = line.substr(18); // Get the quantity
-                        }
-                        else {
-                            cout << "Invalid line format in products.txt" << endl;
-                        }
-                        string line4 = line; // Store the line in a variable
-
-                        // Skip the separator line
-                        data = stoi(pre);
-                        int nq = stoi(quantity);
-                        nq -= 1;
-
-                        if (data == id)
-                        {
-                            // This is the product we want to modify
-                            // Store the new product details in the vector
-                            products.push_back("Product ID: " + to_string(data));
-                            products.push_back("Product Name: " + name);
-                            products.push_back("Product Price: " + price);
-                            products.push_back("Product Quantity: " + to_string(nq));
-                            products.push_back("------------------------");
-                            getline(file, line);
-                            // Skip the old product details in the file
-                            /*file.seekg(reverse - 5);
-                            file.clear();
-                            for (int i = 0; i < 5; i++) {
-                                getline(file, line);
-                                reverse++;
-                            }*/
-                        }
-                        else {
-                            // This is not the product we want to modify
-                            // Store the product details in the vector as is
-                            products.push_back(line1);
-                            products.push_back(line2);
-                            products.push_back(line3);
-                            products.push_back(line4);
-                            products.push_back("------------------------");
-                            getline(file, line);
-                            reverse = reverse + 5;
-                        }
-
-                        c = c + 1;
-                    }
-
-                    file.close(); // Close the file after reading
-
-                    ofstream file_out("products.txt"); // Open the file in write mode
-                    for (int i = 0; i < products.size(); i++)
-                        file_out << products[i] << "\n"; // Write the product details back to the file
-                    file_out.close(); // Close the file after writing
-
-                    // Add the product to the cart
-                    cart.addToCart(cur);
-                }
-                else
+                system("cls");
+                cout << "\n\n\n\n\t\t\tYou have bought : ";
+                for (int i = 0; i < no; i++)
                 {
-                    cout << "\n<<<<<<<<<This item is not available in our store at this time>>>>\n\n";
-                    continue;
-                }
-            }
+                    productsPurch += products[i];
+                    productsPurch += ", ";
+                    //cout << products[i] << ",";
 
-            string customer;
-            while (true) {
-                cout << "Enter your name: ";
-                cin >> customer;
-                if (!all_of(customer.begin(), customer.end(), ::isalpha)) {
-                    cout << "Invalid input. Please enter a valid name without numbers or special characters.\n";
                 }
-                else {
+                cout << productsPurch;
+                price += pay * (0.90);
+                cout << "\n\nOriginal price : " << pay;
+                cout << "\n with 10% discount: " << price << "\nThank you! for the shopping\n\n";
+
+                // Checkout and calculate the total bill
+                
+
+                cout << "\n\nDo you Want Buy another Product[Y/N]: ";
+                cin >> option;
+                fstream customerFile;
+                customerFile.open("customerDetail.txt", ios::app);
+                
+                if (option == 'Y' || option == 'y')
+                    continue;
+                else if (option == 'N' || option == 'n')
+                {
+                    cart.checkout();
+                    system("pause");
+                    if (customerFile.is_open())
+                    {
+                       
+                        customerFile << "\nCustomer Name: " << customer << "\nProduct: " << productsPurch << "\nOriginal price : " << pay << "\n10% discount: " << price;
+                    }
                     break;
                 }
             }
-            enqueue(customer);
-
-            system("cls");
-            cout << "\n\n\n\n\t\t\tYou have bought : ";
-            for (int i = 0; i < no; i++)
-            {
-               // productsPurch += products[i] + ",";
-                cout << products[i] << ",";
-               
-            }
             
-            price += pay * (0.90);
-            cout << "\n\nOriginal price : " << pay;
-            cout << "\n with 10% discount: " << price << "\nThank you! for the shopping\n\n";
-
-            // Checkout and calculate the total bill
-            cart.checkout();
-
-            cout << "\n\nDo you Want Buy another Product[Y/N]: ";
-            cin >> option;
-            fstream customerFile;
-            customerFile.open("customerDetail.txt");
-
-            if (option == 'Y' || option == 'y')
-                continue;
-            else if (option == 'N' || option == 'n')
-            {
-                if (customerFile.is_open())
-                {
-                    customerFile << "Customer Name: "<< customer <<"\nProduct: \nOriginal price : " << pay << "\n with 10% discount: " << price;
-                }
-                continue;
-            }
                
         }
         break;
@@ -963,6 +972,31 @@ void buy(Cart& cart)
         }
         
     
+}
+
+void customerPurchasedProduct() {
+    ifstream customerFile;  // Changed to ifstream for reading
+    string line;
+    int i = 1;
+    system("cls");
+    customerFile.open("customerDetail.txt");
+
+    if (customerFile.is_open()) {
+        while (!customerFile.eof()) {
+            cout << "\nCustomer " << i << "\n";
+            getline(customerFile, line);
+            cout << line << "\n";
+            getline(customerFile, line);
+            cout << line << "\n";
+            getline(customerFile, line);
+            cout << line << "\n";
+            i++;  
+        }
+        customerFile.close();  
+    }
+    else {
+        cout << "Unable to open the file\n";
+    }
 }
 /////////////////////////////////////////////////////////////////////////
 void hashAndShowProducts() {
@@ -1086,11 +1120,12 @@ void administator()
         cout << "\t\t     Enter 6 for Dequeue customer" << endl;
         cout << "\t\t     Enter 7 for Generate hash" << endl;
         cout << "\t\t     Enter 8 for showing Hash Products" << endl;
+        cout << "\t\t     Enter 9 To Show Customer Purchased Product" << endl;
         cout << "\t\t     Enter 0 for Main Menu" << endl;
         cout << "\nEnter Your choice >>>";
         cin >> ch;
 
-        if (cin.fail() || ch < 0 || ch > 8) {
+        if (cin.fail() || ch < 0 || ch > 9) {
             cin.clear();
             //cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cin.ignore();
@@ -1156,7 +1191,7 @@ void administator()
                 }
                 else {
                     break;
-                }
+                } 
             }
             while (true) {
                 cout << "Of total list number : ";
@@ -1177,6 +1212,10 @@ void administator()
             break;
         case 8:
             hashAndShowProducts();
+            system("pause");
+            break;
+        case 9:
+            customerPurchasedProduct();
             system("pause");
             break;
         default: system("cls");

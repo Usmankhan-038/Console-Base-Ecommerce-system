@@ -16,7 +16,7 @@ Product Quantity: 99
 Product ID: 5
 Product Name: 25
 Product Price: 22
-Product Quantity: 12
+Product Quantity: 5
 ------------------------
 Product ID: 4
 Product Name: dsgv
@@ -31,7 +31,7 @@ Product Quantity: -1
 Product ID: 8
 Product Name: sfar
 Product Price: 25
-Product Quantity: 22
+Product Quantity: 17
 ------------------------
 Product ID: 22
 Product Name: jhhhggg
